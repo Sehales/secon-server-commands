@@ -305,7 +305,7 @@ public class ServerCommands {
 			utils.setWeatherRain(player, 10);
 	}
 
-	@SeConCommandHandler(name = "weatherstorm", help = "<darkaqua>make the weather stormy, default 10 minutes;<darkaqau>usage: /weatherstorm [duration]", permission = "secon.command.weatherstorm", aliases = "storm,wstorm")
+	@SeConCommandHandler(name = "weatherstorm", help = "<darkaqua>make the weather stormy, default 10 minutes;<darkaqua>usage: /weatherstorm [duration]", permission = "secon.command.weatherstorm", aliases = "storm,wstorm")
 	public void onWeatherStormCmd(Player player, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
 			int duration;
