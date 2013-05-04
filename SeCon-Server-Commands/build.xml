@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Server-Command-Collection" default="jar" basedir=".">
+<property name="build" value="bin" />
+<property name="jar" value="jar" />
+
+<target name="clean">
+	<delete dir="${build}" />
+	<delete dir="${jar}" />
+</target>
+
+<target name="init" depends="clean">
+	<mkdir dir="${build}" />
+	<mkdir dir="${jar}" />
+</target>
+
+<target name="compile" depends="init">
+
+  <javac srcdir="src" destdir="${build}" includeantruntime="false" target="1.6" source="1.6" debug="true" debuglevel="lines,vars,source">
+    <classpath>
+      <pathelement location="lib/craftbukkit.jar" />
+      <pathelement location="lib/secon.jar" />
+      <pathelement location="lib/Vault.jar" />
+    </classpath>
+  </javac>
+
+</target>
+
+<target name="jar" depends="compile">
+
+  <jar basedir="${build}" destfile="jar/scservercmds.jar">
+    <fileset dir="res" includes="addon.yml" />
+  </jar>
+
+</target>
+
+</project>
