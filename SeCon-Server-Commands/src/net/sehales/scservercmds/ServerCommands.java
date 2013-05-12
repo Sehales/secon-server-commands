@@ -134,6 +134,20 @@ public class ServerCommands {
 			chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
 	}
 
+	@SeConCommandHandler(name = "fakeop", help = "<darkaqua>send a fake 'you are now op' message to a player;<darkaqua>usage: /fakeop [player]", permission = "secon.command.fakeop")
+	public void onFakeOpCmd(CommandSender sender, SeConCommand cmd, String[] args) {
+		if (args.length > 0) {
+			Player p = Bukkit.getPlayer(args[0]);
+			if (p == null) {
+				chat.sendFormattedMessage(sender, LanguageHelper.INFO_PLAYER_NOT_EXIST.replace("<player>", args[0]));
+				return;
+			}
+			chat.sendFormattedMessage(p, sc.getLanguageInfoNode("fakeop.fakeop-msg"));
+			chat.sendFormattedMessage(sender, sc.getLanguageInfoNode("fakeop.sender-msg").replace("<player>", p.getName()));
+		} else
+			chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
+	}
+
 	@SeConCommandHandler(name = "helpop", help = "<darkaqua>send a message to online staff;<darkaqua>usage: /helop [message]", permission = "secon.command.helpop", additionalPerms = "receive:secon.command.helpop.receive", type = CommandType.PLAYER)
 	public void onHelpOpCmd(Player player, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
