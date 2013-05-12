@@ -2,6 +2,7 @@
 <project name="Server-Command-Collection" default="jar" basedir=".">
 <property name="build" value="bin" />
 <property name="jar" value="jar" />
+<property name="craftbukkit" value="lib/craftbukkit.jar" />
 
 <target name="clean">
 	<delete dir="${build}" />
