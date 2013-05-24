@@ -229,11 +229,15 @@ public class ServerCommands {
 	@SeConCommandHandler(name = "tempban", help = "<darkaqua>temporary ban a player (time in minutes);<darkaqua>usage: /tempban [player] [1440] [my ban message]", permission = "secon.command.tempban")
 	public void onTempBanCmd(CommandSender sender, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
-			long time;
+			long time = -1;
 			String reason = null;
 			if (args.length > 1)
-				time = Long.parseLong(args[1]);
-			else {
+				try {
+					time = TimeUtils.getTimestamp(args[1]);
+				} catch (Exception e) {
+
+				}
+			if (time == -1) {
 				chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
 				return;
 			}

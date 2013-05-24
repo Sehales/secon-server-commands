@@ -25,16 +25,15 @@ public final class BanHandler {
 		return ban0(playerName, executorName, reason, -1);
 	}
 
-	private static boolean ban0(String playerName, String executorName, String reason, long minutes) {
+	private static boolean ban0(String playerName, String executorName, String reason, long timestamp) {
 		if (!isBanned(playerName)) {
 			String sql = "";
-			if (minutes < 0l) {
+			if (timestamp < 0l) {
 				sql = "INSERT INTO " + getTableName() + "(`name`, `executorname`, `reason`, `tempban`, `bantime`) VALUES (?, ?, ?, ?, ?);";
 				return db.write(sql, playerName, executorName, reason, 0, System.currentTimeMillis());
 			} else {
-				long time = minutes * 60l * 1000l;
 				sql = "INSERT INTO " + getTableName() + "(`name`, `executorname`, `reason`, `tempban`, `bantime`, `endtime`) VALUES (?, ?, ?, ?, ?, ?);";
-				return db.write(sql, playerName, executorName, reason, 1, System.currentTimeMillis(), System.currentTimeMillis() + time);
+				return db.write(sql, playerName, executorName, reason, 1, System.currentTimeMillis(), System.currentTimeMillis() + timestamp);
 			}
 		} else
 			return false;
@@ -136,8 +135,8 @@ public final class BanHandler {
 		return null;
 	}
 
-	public static boolean tempban(String playerName, String executorName, String reason, long minutes) {
-		return ban0(playerName, executorName, reason, minutes);
+	public static boolean tempban(String playerName, String executorName, String reason, long timestamp) {
+		return ban0(playerName, executorName, reason, timestamp);
 	}
 
 	public static void unban(String playerName) {
