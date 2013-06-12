@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Server-Command-Collection" default="jar" basedir=".">
+<property environment="env"/>
+<property name="buildname" value="${env.JOB_NAME}-BUILD_${env.BUILD_NUMBER}.jar"/>
 <property name="build" value="bin" />
 <property name="jar" value="jar" />
 <property name="craftbukkit" value="lib/craftbukkit.jar" />
@@ -30,7 +32,7 @@
 
 <target name="jar" depends="compile">
 
-  <jar basedir="${build}" destfile="jar/scservercmds.jar">
+  <jar basedir="${build}" destfile="jar/${buildname}">
     <fileset dir="res" includes="addon.yml" />
   </jar>
 
