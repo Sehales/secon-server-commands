@@ -30,6 +30,8 @@ public class ServerCmdCollection extends SeConAddon {
 		addConfigNode("kick.broadcast", true);
 		addConfigNode("ban.broadcast", true);
 		addConfigNode("unban.broadcast", true);
+
+		saveConf();
 	}
 
 	private void initLanguage() {
