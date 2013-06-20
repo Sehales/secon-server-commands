@@ -61,6 +61,7 @@ public class ServerCmdCollection extends SeConAddon {
 		addLanguageInfoNode("weather.storm-msg", "<gold>It's now stormy for <green><duration> <gold>minutes");
 		addLanguageInfoNode("time.time-msg", "<gold>It's <green><realtime> <grey>(<timevalue> <gold>in server time<grey>)");
 		addLanguageInfoNode("helpop.prefix", "<red>[HELPOP request by <player>] <green>");
+		addLanguageInfoNode("helpop.request-sent", "<gold>Your request has been sent to online staff!");
 		addLanguageInfoNode("baninfo.banned-msg", "<grey>'<green><player><grey>'<gold> was <red>permanently <gold>banned at <grey><date> <red>reason: <green><reason>");
 		addLanguageInfoNode("baninfo.temp-banned-msg", "<grey>'<green><player><grey>'<gold> was banned at <grey><date> <gold>until <grey><enddate> <red>reason: <green><reason>");
 		addLanguageInfoNode("baninfo.not-banned-msg", "<grey>'<green><player><grey>'<gold> is not banned");

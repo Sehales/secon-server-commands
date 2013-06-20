@@ -155,6 +155,7 @@ public class ServerCommands {
 			for (Player p : Bukkit.getOnlinePlayers())
 				if (SeCon.getAPI().getSeConUtils().hasPermission(player, cmd.getPermission("receive"), false))
 					chat.sendFormattedMessage(p, msg);
+			chat.sendFormattedMessage(player, sc.getLanguageInfoNode("helpop.request-sent"));
 		} else
 			chat.sendFormattedMessage(player, LanguageHelper.INFO_WRONG_ARGUMENTS);
 	}
@@ -185,6 +186,7 @@ public class ServerCommands {
 		StringBuilder sb = new StringBuilder();
 		InvManager invManager = null;
 		boolean canSeeOthers = true;
+		int amount = 0;
 
 		if (SeCon.getAPI().isAddonAPIOnline("InvisibilityManager"))
 			invManager = new InvManager();
@@ -197,14 +199,12 @@ public class ServerCommands {
 				if (!canSeeOthers && invManager.getInstance().isHidden(p))
 					continue;
 			sb.append("<grey>" + SeCon.getAPI().getSeConUtils().getPlayerPrefix(p.getWorld(), p) + p.getName() + SeCon.getAPI().getSeConUtils().getPlayerSuffix(p.getWorld(), p) + "<grey>, ");
+			amount++;
 		}
 
-		String amount = "0";
-		if (Bukkit.getOnlinePlayers().length > 0)
-			amount = Integer.toString(Bukkit.getServer().getOnlinePlayers().length);
 		chat.sendFormattedMessage(
 		        sender,
-		        sc.getLanguageInfoNode("list.currently-online").replace("<max>", Integer.toString(Bukkit.getServer().getMaxPlayers())).replace("<amount>", amount)
+		        sc.getLanguageInfoNode("list.currently-online").replace("<max>", Integer.toString(Bukkit.getServer().getMaxPlayers())).replace("<amount>", Integer.toString(amount))
 		                .replace("<playerlist>", sb.toString() != null && !sb.toString().isEmpty()? sb.substring(0, sb.length() - 8) : ""));
 	}
 
