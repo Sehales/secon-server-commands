@@ -20,6 +20,7 @@
       <pathelement location="lib/craftbukkit.jar" />
       <pathelement location="lib/secon.jar" />
       <pathelement location="lib/Vault.jar" />
+      <pathelement location="lib/scplayercmds.jar" />
     </classpath>
   </javac>
 

@@ -183,8 +183,22 @@ public class ServerCommands {
 	@SeConCommandHandler(name = "list", help = "<darkaqua>get a list of all online players;<darkaqua>usage: /list", permission = "secon.command.list", aliases = "who,playerlist")
 	public void onListCmd(CommandSender sender, SeConCommand cmd, String[] args) {
 		StringBuilder sb = new StringBuilder();
-		for (Player p : Bukkit.getServer().getOnlinePlayers())
+		InvManager invManager = null;
+		boolean canSeeOthers = true;
+
+		if (SeCon.getAPI().isAddonAPIOnline("InvisibilityManager"))
+			invManager = new InvManager();
+
+		if (invManager != null)
+			canSeeOthers = invManager.getInstance().canSeeOthers(sender);
+
+		for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+			if (invManager != null)
+				if (!canSeeOthers && invManager.getInstance().isHidden(p))
+					continue;
 			sb.append("<grey>" + SeCon.getAPI().getSeConUtils().getPlayerPrefix(p.getWorld(), p) + p.getName() + SeCon.getAPI().getSeConUtils().getPlayerSuffix(p.getWorld(), p) + "<grey>, ");
+		}
+
 		String amount = "0";
 		if (Bukkit.getOnlinePlayers().length > 0)
 			amount = Integer.toString(Bukkit.getServer().getOnlinePlayers().length);
