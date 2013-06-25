@@ -32,7 +32,7 @@ public class ServerCommands {
 		this.utils = utils;
 	}
 
-	@SeConCommandHandler(name = "ban", help = "<darkaqua>ban a player forever (that is a long time!);<darkaqua>usage: /ban [player] [my ban message]", permission = "secon.command.ban")
+	@SeConCommandHandler(name = "ban", help = "<darkaqua>ban a player forever (that is a long time!);<darkaqua>usage: /ban [player] [ban message]", permission = "secon.command.ban")
 	public void onBanCmd(CommandSender sender, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
 			String reason = null;
@@ -124,7 +124,7 @@ public class ServerCommands {
 			chat.sendFormattedMessage(sender, sc.getLanguageInfoNode("banlist.no-banned-players-msg"));
 	}
 
-	@SeConCommandHandler(name = "broadcast", help = "<darkaqua>broadcast a server wide message;<darkaqua>usage: /broadcast Hello world!", permission = "secon.command.broadcast")
+	@SeConCommandHandler(name = "broadcast", help = "<darkaqua>broadcast a server wide message;<darkaqua>usage: /broadcast [message]", permission = "secon.command.broadcast")
 	public void onBroadcastCmd(CommandSender sender, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
 			String msg = sc.getLanguageInfoNode("broadcast.prefix") + chat.getStringOfArray(args, 0);
@@ -160,7 +160,7 @@ public class ServerCommands {
 			chat.sendFormattedMessage(player, LanguageHelper.INFO_WRONG_ARGUMENTS);
 	}
 
-	@SeConCommandHandler(name = "kick", help = "<darkaqua>kick another player with an optional message;<darkaqua>usage: /kick [player] [my kick message]", permission = "secon.command.kick")
+	@SeConCommandHandler(name = "kick", help = "<darkaqua>kick another player with an optional message;<darkaqua>usage: /kick [player] [kick message]", permission = "secon.command.kick")
 	public void onKickCmd(CommandSender sender, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
 			Player p = Bukkit.getPlayer(args[0]);
@@ -208,6 +208,36 @@ public class ServerCommands {
 		                .replace("<playerlist>", sb.toString() != null && !sb.toString().isEmpty()? sb.substring(0, sb.length() - 8) : ""));
 	}
 
+	@SeConCommandHandler(name = "message", help = "<darkaqua>send a message to another player or to the console;<darkaqua>usage: /message [player name|console]", permission = "secon.command.message", aliases = "msg,m,pm,tell")
+	public void onMessageCmd(CommandSender sender, SeConCommand cmd, String[] args) {
+		if (args.length > 1) {
+			String receiverName = args[0];
+			String message = chat.getStringOfArray(args, 1);
+
+			if (receiverName.equalsIgnoreCase("console"))
+				utils.sendPrivateMessage(sender, Bukkit.getConsoleSender(), message);
+			else {
+				Player p = Bukkit.getPlayer(receiverName);
+				if (p == null) {
+					chat.sendFormattedMessage(sender, LanguageHelper.INFO_PLAYER_NOT_EXIST.replace("<player>", args[0]));
+					return;
+				}
+				utils.sendPrivateMessage(sender, p, message);
+			}
+		} else
+			chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
+	}
+
+	@SeConCommandHandler(name = "reply", help = "<darkaqua>reply to the last message sender;<darkaqua>usage: /reply [message]", permission = "secon.command.reply", aliases = "r")
+	public void onReplyCmd(CommandSender sender, SeConCommand cmd, String[] args) {
+		if (args.length > 0) {
+			String message = chat.getStringOfArray(args, 0);
+			if (!utils.reply(sender, message))
+				chat.sendFormattedMessage(sender, sc.getLanguageInfoNode("reply.no-receiver"));
+		} else
+			chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
+	}
+
 	@SeConCommandHandler(name = "setspawn", help = "set the world's spawn location at where you are standing;<darkaqua>usage: /setspawn", permission = "secon.command.spawn", type = CommandType.PLAYER)
 	public void onSetSpawnCmd(Player sender, SeConCommand cmd, String[] args) {
 		World w = sender.getWorld();
@@ -240,7 +270,7 @@ public class ServerCommands {
 		}
 	}
 
-	@SeConCommandHandler(name = "tempban", help = "<darkaqua>temporary ban a player (time in minutes);<darkaqua>usage: /tempban [player] [1440] [my ban message]", permission = "secon.command.tempban")
+	@SeConCommandHandler(name = "tempban", help = "<darkaqua>temporary ban a player (time in minutes);<darkaqua>usage: /tempban [player] [1d2h] [ban message]", permission = "secon.command.tempban")
 	public void onTempBanCmd(CommandSender sender, SeConCommand cmd, String[] args) {
 		if (args.length > 0) {
 			long time = -1;
@@ -249,7 +279,8 @@ public class ServerCommands {
 				try {
 					time = TimeUtils.getTimestamp(args[1]);
 				} catch (Exception e) {
-
+					chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
+					return;
 				}
 			if (time == -1) {
 				chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
@@ -319,7 +350,17 @@ public class ServerCommands {
 
 	@SeConCommandHandler(name = "weatherclear", help = "<darkaqua>clear the weather;<darkaqua>usage: /weather", permission = "secon.command.weatherclear", aliases = "wclear,clearweather")
 	public void onWeatherClearCmd(Player player, SeConCommand cmd, String[] args) {
-		utils.setWeatherClear(player);
+		if (args.length > 0) {
+			int duration;
+			try {
+				duration = Integer.parseInt(args[0]);
+			} catch (NumberFormatException e) {
+				chat.sendFormattedMessage(player, LanguageHelper.INFO_WRONG_ARGUMENTS);
+				return;
+			}
+			utils.setWeatherClear(player, duration);
+		} else
+			utils.setWeatherClear(player, 10);
 	}
 
 	@SeConCommandHandler(name = "weatherrain", help = "<darkaqua>let it rain, default 10 minutes;<darkaqua>usage: /weatherrain [duration]", permission = "secon.command.weatherrain", aliases = "rain,wrain,letitrain")
@@ -376,5 +417,4 @@ public class ServerCommands {
 		} else
 			chat.sendFormattedMessage(sender, LanguageHelper.INFO_WRONG_ARGUMENTS);
 	}
-
 }

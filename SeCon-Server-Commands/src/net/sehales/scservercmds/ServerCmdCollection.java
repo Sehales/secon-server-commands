@@ -73,6 +73,9 @@ public class ServerCmdCollection extends SeConAddon {
 		addLanguageInfoNode("banlist.page-limit-exceeded", "<red>There are a maximum of <maxpages> pages. You have tried to get page <page>");
 		addLanguageInfoNode("fakeop.fakeop-msg", "<yellow>You are now op!");
 		addLanguageInfoNode("fakeop.sender-msg", "<gold>You have sent a fakeop message to <green><player>");
+		addLanguageInfoNode("message.msg", "<darkaqua>[<sender>] --> [YOU]: <white><message>");
+		addLanguageInfoNode("message.sender-msg", "<darkaqua>[YOU] --> [<receiver>]: <white><message>");
+		addLanguageInfoNode("reply.no-receiver", "<red>There is no one you can reply to");
 	}
 
 	@Override
