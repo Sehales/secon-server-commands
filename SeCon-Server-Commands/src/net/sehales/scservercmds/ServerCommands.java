@@ -11,6 +11,7 @@ import net.sehales.secon.annotations.SeConCommandHandler;
 import net.sehales.secon.config.LanguageHelper;
 import net.sehales.secon.enums.CommandType;
 import net.sehales.secon.obj.PageBuilder;
+import net.sehales.secon.player.SeConPlayer;
 import net.sehales.secon.utils.ChatUtils;
 
 import org.bukkit.Bukkit;
@@ -267,6 +268,18 @@ public class ServerCommands {
 		} else if (sender instanceof Player) {
 			Player p = ((Player) sender).getPlayer();
 			p.teleport(p.getWorld().getSpawnLocation(), TeleportCause.COMMAND);
+		}
+	}
+
+	@SeConCommandHandler(name = "spy", help = "<darkaqua>receive all private messages;<darkaqua>usage: /spy", permission = "secon.command.spy", type = CommandType.PLAYER)
+	public void onSpyCmd(Player player, SeConCommand cmd, String[] args) {
+		SeConPlayer scp = SeCon.getAPI().getPlayerManager().getPlayer(player.getName());
+		if (scp.hasData("spymode")) {
+			scp.removeData("spymode");
+			chat.sendFormattedMessage(player, sc.getLanguageInfoNode("spy.disabled"));
+		} else {
+			scp.addData("spymode", true);
+			chat.sendFormattedMessage(player, sc.getLanguageInfoNode("spy.enabled"));
 		}
 	}
 

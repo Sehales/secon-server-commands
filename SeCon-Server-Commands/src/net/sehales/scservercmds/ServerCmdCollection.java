@@ -76,6 +76,9 @@ public class ServerCmdCollection extends SeConAddon {
 		addLanguageInfoNode("message.msg", "<darkaqua>[<sender>] --> [YOU]: <white><message>");
 		addLanguageInfoNode("message.sender-msg", "<darkaqua>[YOU] --> [<receiver>]: <white><message>");
 		addLanguageInfoNode("reply.no-receiver", "<red>There is no one you can reply to");
+		addLanguageInfoNode("spy.header", "<red>[SPY]<darkaqua>[<sender>] --> [<receiver>]: <white><message>");
+		addLanguageInfoNode("spy.enabled", "<gold>Spy mode enabled");
+		addLanguageInfoNode("spy.disabled", "<gold>Spy mode disabled");
 	}
 
 	@Override

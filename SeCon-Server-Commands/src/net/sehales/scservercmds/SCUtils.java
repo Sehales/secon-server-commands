@@ -8,6 +8,7 @@ import java.util.Map;
 
 import net.sehales.secon.SeCon;
 import net.sehales.secon.exception.DataNotFoundException;
+import net.sehales.secon.player.PlayerManager;
 import net.sehales.secon.player.SeConPlayer;
 import net.sehales.secon.utils.ChatUtils;
 
@@ -51,13 +52,13 @@ public class SCUtils {
 		replyMap.put(receiver.getName(), sender.getName());
 
 		chat.sendFormattedMessage(sender, sc.getLanguageInfoNode("message.sender-msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
-
-		SeConPlayer scp = SeCon.getAPI().getPlayerManager().getPlayer(sender.getName());
+		PlayerManager pm = SeCon.getAPI().getPlayerManager();
+		SeConPlayer scPlayer = pm.getPlayer(sender.getName());
 
 		List<String> ignoredByPlayers;
 		Object obj = null;
 		try {
-			obj = scp.getData("ignoredByPlayers");
+			obj = scPlayer.getData("ignoredByPlayers");
 		} catch (DataNotFoundException e) {
 		}
 
@@ -68,7 +69,17 @@ public class SCUtils {
 
 		if (!ignoredByPlayers.contains(receiver.getName()))
 			chat.sendFormattedMessage(receiver, sc.getLanguageInfoNode("message.msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
+		String spyMessage = sc.getLanguageInfoNode("spy.header").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message);
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			if (p.equals(receiver) || p.equals(sender))
+				continue;
 
+			SeConPlayer scp = pm.getPlayer(p.getName());
+			if (scp.hasData("spymode"))
+				chat.sendFormattedMessage(p, spyMessage);
+		}
+
+		chat.sendFormattedMessage(Bukkit.getConsoleSender(), spyMessage);
 	}
 
 	public void setWeatherClear(Player player, int duration) {
