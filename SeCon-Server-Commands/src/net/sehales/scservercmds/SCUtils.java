@@ -1,9 +1,14 @@
 package net.sehales.scservercmds;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import net.sehales.secon.SeCon;
+import net.sehales.secon.exception.DataNotFoundException;
+import net.sehales.secon.player.SeConPlayer;
 import net.sehales.secon.utils.ChatUtils;
 
 import org.bukkit.Bukkit;
@@ -41,11 +46,28 @@ public class SCUtils {
 		return false;
 	}
 
+	@SuppressWarnings("unchecked")
 	public void sendPrivateMessage(CommandSender sender, CommandSender receiver, String message) {
 		replyMap.put(receiver.getName(), sender.getName());
 
 		chat.sendFormattedMessage(sender, sc.getLanguageInfoNode("message.sender-msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
-		chat.sendFormattedMessage(receiver, sc.getLanguageInfoNode("message.msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
+
+		SeConPlayer scp = SeCon.getAPI().getPlayerManager().getPlayer(sender.getName());
+
+		List<String> ignoredByPlayers;
+		Object obj = null;
+		try {
+			obj = scp.getData("ignoredByPlayers");
+		} catch (DataNotFoundException e) {
+		}
+
+		if (obj != null && obj instanceof ArrayList)
+			ignoredByPlayers = (List<String>) obj;
+		else
+			ignoredByPlayers = Collections.emptyList();
+
+		if (!ignoredByPlayers.contains(receiver.getName()))
+			chat.sendFormattedMessage(receiver, sc.getLanguageInfoNode("message.msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
 
 	}
 
