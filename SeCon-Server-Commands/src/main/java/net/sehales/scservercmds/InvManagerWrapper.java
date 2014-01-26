@@ -2,16 +2,15 @@
 package net.sehales.scservercmds;
 
 import net.sehales.scplayercmds.InvisibilityManager;
+import net.sehales.scplayercmds.PlayerCmdCollection;
 import net.sehales.secon.addon.Addon;
 
-public class InvManager {
+public class InvManagerWrapper {
     
     private InvisibilityManager invManager;
     
-    public InvManager(Addon playerCmds) {
-        // invManager =
-        playerCmds.getInvManager();
-        ;
+    public InvManagerWrapper(Addon playerCmds) {
+        ((PlayerCmdCollection) playerCmds).getInvManager();
     }
     
     public InvisibilityManager getInstance() {
