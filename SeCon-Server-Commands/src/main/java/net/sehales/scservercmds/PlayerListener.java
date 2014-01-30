@@ -3,7 +3,7 @@ package net.sehales.scservercmds;
 
 import java.util.Date;
 
-import net.sehales.secon.utils.mc.ChatUtils;
+import net.sehales.secon.utils.chat.ChatUtils;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

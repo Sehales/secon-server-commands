@@ -10,7 +10,7 @@ import java.util.Map;
 import net.sehales.secon.SeCon;
 import net.sehales.secon.player.PlayerManager;
 import net.sehales.secon.player.SCPlayer;
-import net.sehales.secon.utils.mc.ChatUtils;
+import net.sehales.secon.utils.chat.ChatUtils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
