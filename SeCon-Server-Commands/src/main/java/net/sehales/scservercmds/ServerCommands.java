@@ -69,7 +69,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "baninfo", description = "<darkaqua>check if a user is banned or not", usage = "<darkaqua>/baninfo [player]", permission = "secon.command.baninfo", aliases = "isbanned,checkban,bancheck")
+    @MethodCommandHandler(name = "baninfo", description = "<darkaqua>check if a user is banned or not", usage = "<darkaqua>/baninfo [player]", permission = "secon.command.baninfo", aliases = { "isbanned", "checkban", "bancheck" })
     public void onBanInfoCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             BanInfo info = BanHandler.getBanInfo(args[0]);
@@ -85,7 +85,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "banlist", description = "<darkaqua>list all banned players", usage = "<darkaqua>/banlist", permission = "secon.command.banlist", aliases = "listbans,bannedplayers")
+    @MethodCommandHandler(name = "banlist", description = "<darkaqua>list all banned players", usage = "<darkaqua>/banlist", permission = "secon.command.banlist", aliases = { "listbans", "bannedplayers" })
     public void onBanListCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         List<BanInfo> banInfoList = BanHandler.listBans();
         if (banInfoList != null) {
@@ -196,7 +196,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "list", description = "<darkaqua>get a list of all online players", usage = "<darkaqua>/list", permission = "secon.command.list", aliases = "who,playerlist")
+    @MethodCommandHandler(name = "list", description = "<darkaqua>get a list of all online players", usage = "<darkaqua>/list", permission = "secon.command.list", aliases = { "who", "playerlist" })
     public void onListCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         StringBuilder sb = new StringBuilder();
         InvisibilityManager invManager = null;
@@ -251,7 +251,7 @@ public class ServerCommands {
                                                                                                                                                                                                                                         && !sb.toString().isEmpty() ? sb.substring(0, sb.length() - 8) : ""));
     }
     
-    @MethodCommandHandler(name = "message", description = "<darkaqua>send a message to another player or to the console", usage = "<darkaqua>/message [player name|console]", permission = "secon.command.message", aliases = "msg,m,pm,tell")
+    @MethodCommandHandler(name = "message", description = "<darkaqua>send a message to another player or to the console", usage = "<darkaqua>/message [player name|console]", permission = "secon.command.message", aliases = { "msg", "tell" })
     public void onMessageCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         if (args.length > 1) {
             String receiverName = args[0];
@@ -272,7 +272,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "reply", description = "<darkaqua>reply to the last message sender", usage = "<darkaqua>/reply [message]", permission = "secon.command.reply", aliases = "r")
+    @MethodCommandHandler(name = "reply", description = "<darkaqua>reply to the last message sender", usage = "<darkaqua>/reply [message]", permission = "secon.command.reply", aliases = { "r" })
     public void onReplyCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             String message = StringUtils.getStringOfArray(args, 0);
@@ -415,7 +415,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "weatherclear", description = "<darkaqua>clear the weather", usage = "<darkaqua>/weather", permission = "secon.command.weatherclear", aliases = "wclear,clearweather")
+    @MethodCommandHandler(name = "weatherclear", description = "<darkaqua>clear the weather", usage = "<darkaqua>/weather", permission = "secon.command.weatherclear", aliases = { "wclear", "clearweather" })
     public void onWeatherClearCmd(Player player, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             int duration;
@@ -431,7 +431,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "weatherrain", description = "<darkaqua>let it rain, default 10 minutes", usage = "<darkaqua>/weatherrain [duration]", permission = "secon.command.weatherrain", aliases = "rain,wrain,letitrain")
+    @MethodCommandHandler(name = "weatherrain", description = "<darkaqua>let it rain, default 10 minutes", usage = "<darkaqua>/weatherrain [duration]", permission = "secon.command.weatherrain", aliases = { "rain", "wrain", "letitrain" })
     public void onWeatherRainCmd(Player player, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             int duration;
@@ -447,7 +447,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "weatherstorm", description = "<darkaqua>make the weather stormy, default 10 minutes", usage = "<darkaqua>/weatherstorm [duration]", permission = "secon.command.weatherstorm", aliases = "storm,wstorm")
+    @MethodCommandHandler(name = "weatherstorm", description = "<darkaqua>make the weather stormy, default 10 minutes", usage = "<darkaqua>/weatherstorm [duration]", permission = "secon.command.weatherstorm", aliases = { "storm", "wstorm" })
     public void onWeatherStormCmd(Player player, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             int duration;
@@ -463,7 +463,7 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "whois", description = "<darkaqua>get some information about a player", usage = "<darkaqua>/whois [player]", permission = "secon.command.whois", aliases = "playerinfo,pinfo")
+    @MethodCommandHandler(name = "whois", description = "<darkaqua>get some information about a player", usage = "<darkaqua>/whois [player]", permission = "secon.command.whois", aliases = { "playerinfo", "pinfo" })
     public void onWhoisCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             OfflinePlayer p = Bukkit.getOfflinePlayer(args[0]);
