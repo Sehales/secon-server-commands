@@ -96,10 +96,11 @@ public final class BanHandler {
     }
     
     public static String getTable() {
-        return String.format("`%s`.%s", db.getDatabaseName() + db.getFormattedTableName("banlist"));
+        return String.format("`%s`.%s", db.getDatabaseName(), db.getFormattedTableName("banlist"));
     }
     
-    static void init(Database db) throws DatabaseException {
+    static void init(Database database) throws DatabaseException {
+        BanHandler.db = database;
         db.execute("CREATE TABLE IF NOT EXISTS " + getTable() + "(" +
         
         "`id` INT AUTO_INCREMENT," +
