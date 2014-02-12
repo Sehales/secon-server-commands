@@ -47,7 +47,7 @@ public final class BanHandler {
                 stmt.setString(1, playerName);
                 stmt.setString(2, executorName);
                 stmt.setString(3, reason);
-                stmt.setInt(4, 0);
+                stmt.setInt(4, 1);
                 stmt.setLong(5, System.currentTimeMillis());
                 stmt.setLong(6, System.currentTimeMillis() + banTime);
             }
