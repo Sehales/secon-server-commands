@@ -23,7 +23,7 @@ public final class BanHandler {
     private static boolean ban0(String playerName, String executorName, String reason, long banTime) {
         try {
             PreparedStatement stmt = null;
-            if (banTime < 0l) {
+            if (banTime <= 0l) {
                 // sql = "INSERT INTO " + getTable() +
                 // "(`name`, `executorname`, `reason`, `tempban`, `bantime`) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `tempban` = `tempban`;";
                 // return db.write(sql, playerName, executorName, reason, 0,
@@ -32,7 +32,6 @@ public final class BanHandler {
                 stmt.clearParameters();
                 stmt.setString(1, playerName);
                 stmt.setString(2, executorName);
-                ;
                 stmt.setString(3, reason);
                 stmt.setInt(4, 0);
                 stmt.setLong(5, System.currentTimeMillis());
@@ -49,7 +48,7 @@ public final class BanHandler {
                 stmt.setString(3, reason);
                 stmt.setInt(4, 1);
                 stmt.setLong(5, System.currentTimeMillis());
-                stmt.setLong(6, System.currentTimeMillis() + banTime);
+                stmt.setLong(6, banTime);
             }
             
             synchronized (db.getConnection()) {
