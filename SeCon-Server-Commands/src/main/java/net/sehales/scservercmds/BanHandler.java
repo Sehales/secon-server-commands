@@ -26,6 +26,9 @@ public final class BanHandler {
     private static boolean ban0(String playerName, String executorName, String reason, long banTime) {
         synchronized (lock) {
             try {
+                if (TEMPBAN.isClosed() || BAN.isClosed()) {
+                    init(db);
+                }
                 PreparedStatement stmt = null;
                 if (banTime <= 0l) {
                     // sql = "INSERT INTO " + getTable() +
@@ -60,7 +63,7 @@ public final class BanHandler {
                 }
                 
                 return stmt.getUpdateCount() > 0;
-            } catch (SQLException e) {
+            } catch (SQLException | DatabaseException e) {
                 e.printStackTrace();
             }
             return false;
@@ -71,6 +74,9 @@ public final class BanHandler {
         synchronized (lock) {
             ResultSet query = null;
             try {
+                if (BAN_INFO.isClosed()) {
+                    init(db);
+                }
                 BAN_INFO.clearParameters();
                 BAN_INFO.setString(1, playerName);
                 synchronized (db.getConnection()) {
@@ -109,34 +115,34 @@ public final class BanHandler {
     static void init(Database database) throws DatabaseException {
         synchronized (lock) {
             BanHandler.db = database;
-            db.execute("CREATE TABLE IF NOT EXISTS " + getTable() + "(" +
-            
-            "`id` INT AUTO_INCREMENT," +
-            
-            "`name` VARCHAR(16) NOT NULL ," +
-            
-            "`executorname` VARCHAR(16) NOT NULL ," +
-            
-            "`reason` VARCHAR(1000) NULL ," +
-            
-            "`bantime` BIGINT NOT NULL ," +
-            
-            "`tempban` INT NOT NULL DEFAULT 0 ," +
-            
-            "`endtime` BIGINT NULL ," +
-            
-            "PRIMARY KEY (`id`, `name`) ," +
-            
-            "UNIQUE INDEX `id_UNIQUE` (`id` ASC) ," +
-            
-            "UNIQUE INDEX `name_UNIQUE` (`name` ASC) )" +
-            
-            "ENGINE = MyISAM " +
-            
-            "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;");
-            
             try {
                 synchronized (db.getConnection()) {
+                    db.execute("CREATE TABLE IF NOT EXISTS " + getTable() + "(" +
+                    
+                    "`id` INT AUTO_INCREMENT," +
+                    
+                    "`name` VARCHAR(16) NOT NULL ," +
+                    
+                    "`executorname` VARCHAR(16) NOT NULL ," +
+                    
+                    "`reason` VARCHAR(1000) NULL ," +
+                    
+                    "`bantime` BIGINT NOT NULL ," +
+                    
+                    "`tempban` INT NOT NULL DEFAULT 0 ," +
+                    
+                    "`endtime` BIGINT NULL ," +
+                    
+                    "PRIMARY KEY (`id`, `name`) ," +
+                    
+                    "UNIQUE INDEX `id_UNIQUE` (`id` ASC) ," +
+                    
+                    "UNIQUE INDEX `name_UNIQUE` (`name` ASC) )" +
+                    
+                    "ENGINE = MyISAM " +
+                    
+                    "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;");
+                    
                     IS_BANNED = db.getConnection().prepareStatement("SELECT * FROM " + getTable() + " WHERE name = ?;");
                     BAN = db.getConnection().prepareStatement("INSERT INTO " + getTable()
                                                               + "(`name`, `executorname`, `reason`, `tempban`, `bantime`) VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE `tempban` = `tempban`;");
@@ -155,6 +161,9 @@ public final class BanHandler {
     public static boolean isBanned(String playerName) {
         synchronized (lock) {
             try {
+                if (IS_BANNED.isClosed()) {
+                    init(db);
+                }
                 IS_BANNED.clearParameters();
                 IS_BANNED.setString(1, playerName);
                 synchronized (db.getConnection()) {
@@ -165,7 +174,7 @@ public final class BanHandler {
                         }
                     }
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | DatabaseException e) {
                 e.printStackTrace();
             }
             return false;
@@ -218,10 +227,13 @@ public final class BanHandler {
     public static void unban(String playerName) {
         synchronized (lock) {
             try {
+                if (UNBAN.isClosed()) {
+                    init(db);
+                }
                 UNBAN.clearWarnings();
                 UNBAN.setString(1, playerName);
                 UNBAN.execute();
-            } catch (SQLException e) {
+            } catch (SQLException | DatabaseException e) {
                 e.printStackTrace();
             }
         }
