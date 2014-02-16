@@ -40,7 +40,7 @@ public class SCUtils {
                 return false;
             }
             
-            sendPrivateMessage(sender, Bukkit.getConsoleSender(), message);
+            sendPrivateMessage(sender, receiver, message);
             return true;
             
         }
@@ -51,7 +51,7 @@ public class SCUtils {
     public void sendPrivateMessage(CommandSender sender, CommandSender receiver, String message) {
         replyMap.put(receiver.getName(), sender.getName());
         
-        ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("message.sender-msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
+        ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("message.sender-msg").replace("<sender>", sender.getName()).replace("<receiver>", receiver.getName()).replace("<message>", message));
         PlayerManager pm = SeCon.getInstance().getPlayerManager();
         SCPlayer scPlayer = pm.getPlayer(sender.getName());
         
@@ -65,9 +65,9 @@ public class SCUtils {
         }
         
         if (!ignoredByPlayers.contains(receiver.getName())) {
-            ChatUtils.sendFormattedMessage(receiver, sc.getLanguageNode("message.msg").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message));
+            ChatUtils.sendFormattedMessage(receiver, sc.getLanguageNode("message.msg").replace("<sender>", sender.getName()).replace("<receiver>", receiver.getName()).replace("<message>", message));
         }
-        String spyMessage = sc.getLanguageNode("spy.header").replace("<sender>", sender.getName()).replace("<receiver", receiver.getName()).replace("<message>", message);
+        String spyMessage = sc.getLanguageNode("spy.header").replace("<sender>", sender.getName()).replace("<receiver>", receiver.getName()).replace("<message>", message);
         for (Player p : Bukkit.getOnlinePlayers()) {
             if (p.equals(receiver) || p.equals(sender)) {
                 continue;
