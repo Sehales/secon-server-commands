@@ -491,8 +491,8 @@ public class ServerCommands {
             info.add(sc.getLanguageNode("whois.name").replace("<name>", playerPrefix + p.getName() + playerSuffix));
             info.add(sc.getLanguageNode("whois.op").replace("<value>", p.isOp() ? sc.getLanguageNode("whois.yes") : sc.getLanguageNode("whois.no")));
             
-            info.add(sc.getLanguageNode("whois.first-online").replace("<time>", DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(p.getFirstPlayed())));
-            info.add(sc.getLanguageNode("whois.last-online").replace("<time>", DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(p.getLastPlayed())));
+            info.add(sc.getLanguageNode("whois.first-online").replace("<time>", p.getFirstPlayed() == 0 ? "---" : DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(p.getFirstPlayed())));
+            info.add(sc.getLanguageNode("whois.last-online").replace("<time>", p.getLastPlayed() == 0 ? "---" : DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG).format(p.getLastPlayed())));
             if (p.isOnline()) {
                 info.add(sc.getLanguageNode("whois.ip").replace("<value>", p.getPlayer().getAddress().toString().substring(1)));
             }
