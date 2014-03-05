@@ -284,8 +284,24 @@ public class ServerCommands {
         }
     }
     
-    @MethodCommandHandler(name = "setspawn", description = "set the world's spawn location at where you are standing", usage = "<darkaqua>/setspawn", permission = "secon.command.spawn", type = CommandType.PLAYER)
+    @MethodCommandHandler(name = "setglobalspawn", description = "set the servers' spawn location at where you stay", usage = "<darkaqua>/setglobalspawn", permission = "secon.command.setglobalspawn", type = CommandType.PLAYER, aliases = { "setserverspawn" })
     public void onSetSpawnCmd(Player sender, SeConCommand cmd, String[] args) {
+        World w = sender.getWorld();
+        Location l = sender.getLocation();
+        double x = l.getX();
+        double y = l.getY();
+        double z = l.getZ();
+        sc.getConf().set("spawn-location.world", w.getName());
+        sc.getConf().set("spawn-location.x", x);
+        sc.getConf().set("spawn-location.y", y);
+        sc.getConf().set("spawn-location.z", z);
+        sc.getConf().set("spawn-location.yaw", l.getYaw());
+        sc.getConf().set("spawn-location.pitch", l.getPitch());
+        ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.set-msg").replace("<x>", Double.toString(x)).replace("<y>", Double.toString(y)).replace("<z>", Double.toString(z)).replace("<world>", w.getName()));
+    }
+    
+    @MethodCommandHandler(name = "setspawn", description = "set the world's spawn location at where you stay", usage = "<darkaqua>/setspawn", permission = "secon.command.setspawn", type = CommandType.PLAYER)
+    public void onSetWorldSpawnCmd(Player sender, SeConCommand cmd, String[] args) {
         World w = sender.getWorld();
         Location l = sender.getLocation();
         int x = l.getBlockX();
@@ -295,7 +311,7 @@ public class ServerCommands {
         ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.set-msg").replace("<x>", Integer.toString(x)).replace("<y>", Integer.toString(y)).replace("<z>", Integer.toString(z)).replace("<world>", w.getName()));
     }
     
-    @MethodCommandHandler(name = "spawn", description = "<darkaqua>teleport yourself or another player to the world's spawn", usage = "<darkaqua>/spawn [player]", additionalPerms = "other:secon.command.spawn.other", permission = "secon.command.spawn")
+    @MethodCommandHandler(name = "spawn", description = "<darkaqua>teleport yourself or another player to the server' global spawn", usage = "<darkaqua>/spawn", additionalPerms = "other:secon.command.spawn.other", permission = "secon.command.spawn", aliases = { "serverspawn" })
     public void onSpawnCmd(CommandSender sender, SeConCommand cmd, String[] args) {
         if (args.length > 0) {
             if (MiscUtils.hasPermission(sender, cmd.getPermission("other"), true)) {
@@ -304,7 +320,18 @@ public class ServerCommands {
                     ChatUtils.sendFormattedMessage(sender, lang.PLAYER_NOT_FOUND.replace("<player>", args[0]));
                     return;
                 }
-                p.teleport(p.getWorld().getSpawnLocation(), TeleportCause.COMMAND);
+                
+                World w = Bukkit.getWorld(sc.getConf().getString("spawn-location.world"));
+                double x = sc.getConf().getDouble("spawn-location.x");
+                double y = sc.getConf().getDouble("spawn-location.y");
+                double z = sc.getConf().getDouble("spawn-location.z");
+                float yaw = (float) sc.getConf().getDouble("spawn-location.yaw");
+                float pitch = (float) sc.getConf().getDouble("spawn-location.pitch");
+                if (w == null) {
+                    ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.world-not-found"));
+                    return;
+                }
+                p.teleport(new Location(w, x, y, z, yaw, pitch), TeleportCause.COMMAND);
                 ChatUtils.sendFormattedMessage(p, sc.getLanguageNode("spawn.teleported-msg").replace("<world>", p.getWorld().getName()));
                 ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.sender-teleported-msg").replace("<player>", p.getName()).replace("<world>", p.getWorld().getName()));
             }
@@ -500,6 +527,26 @@ public class ServerCommands {
             ChatUtils.sendFormattedMessage(sender, info);
         } else {
             ChatUtils.sendFormattedMessage(sender, lang.NOT_ENOUGH_ARGUMENTS);
+        }
+    }
+    
+    @MethodCommandHandler(name = "worldspawn", description = "<darkaqua>teleport yourself or another player to the world's spawn", usage = "<darkaqua>/worldspawn [player]", additionalPerms = "other:secon.command.worldspawn.other", permission = "secon.command.worldspawn", aliases = { "wspawn" })
+    public void onWorldSpawnCmd(CommandSender sender, SeConCommand cmd, String[] args) {
+        if (args.length > 0) {
+            if (MiscUtils.hasPermission(sender, cmd.getPermission("other"), true)) {
+                Player p = Bukkit.getPlayer(args[0]);
+                if (p == null) {
+                    ChatUtils.sendFormattedMessage(sender, lang.PLAYER_NOT_FOUND.replace("<player>", args[0]));
+                    return;
+                }
+                p.teleport(p.getWorld().getSpawnLocation(), TeleportCause.COMMAND);
+                ChatUtils.sendFormattedMessage(p, sc.getLanguageNode("spawn.teleported-msg").replace("<world>", p.getWorld().getName()));
+                ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.sender-teleported-msg").replace("<player>", p.getName()).replace("<world>", p.getWorld().getName()));
+            }
+            
+        } else if (sender instanceof Player) {
+            Player p = ((Player) sender).getPlayer();
+            p.teleport(p.getWorld().getSpawnLocation(), TeleportCause.COMMAND);
         }
     }
 }

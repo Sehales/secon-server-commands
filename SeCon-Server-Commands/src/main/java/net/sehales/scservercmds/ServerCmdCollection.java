@@ -48,6 +48,7 @@ public class ServerCmdCollection extends Addon {
         addLanguageNode("spawn.set-msg", "<gold>You have set the spawn of the world <blue><world> <gold>to <gray>x: <blue><x><gray>, y: <blue><y><gray>, z: <blue><z>");
         addLanguageNode("spawn.teleported-msg", "<gold>You have been teleported to the spawn");
         addLanguageNode("spawn.sender-teleported-msg", "<gold>You have teleported <green><player> <gold>to the spawn of world: <green><world>");
+        addLanguageNode("spawn.world-not-found", "<red>A world with the name '<world>' cannot be found!");
         addLanguageNode("ban.default-reason", "You are banned");
         addLanguageNode("ban.banned-msg", "<green><player> <red>has been banned by <gold><sender> <green>reason: <red><reason>");
         addLanguageNode("ban.already-banned", "<green><player> <gold>is already banned");
