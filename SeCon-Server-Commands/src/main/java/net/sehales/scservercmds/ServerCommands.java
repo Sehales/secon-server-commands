@@ -297,6 +297,7 @@ public class ServerCommands {
         sc.getConf().set("spawn-location.z", z);
         sc.getConf().set("spawn-location.yaw", l.getYaw());
         sc.getConf().set("spawn-location.pitch", l.getPitch());
+        sc.saveConf();
         ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.set-msg").replace("<x>", Double.toString(x)).replace("<y>", Double.toString(y)).replace("<z>", Double.toString(z)).replace("<world>", w.getName()));
     }
     
@@ -338,7 +339,25 @@ public class ServerCommands {
             
         } else if (sender instanceof Player) {
             Player p = ((Player) sender).getPlayer();
-            p.teleport(p.getWorld().getSpawnLocation(), TeleportCause.COMMAND);
+            if (p == null) {
+                ChatUtils.sendFormattedMessage(sender, lang.PLAYER_NOT_FOUND.replace("<player>", args[0]));
+                return;
+            }
+            
+            World w = Bukkit.getWorld(sc.getConf().getString("spawn-location.world"));
+            double x = sc.getConf().getDouble("spawn-location.x");
+            double y = sc.getConf().getDouble("spawn-location.y");
+            double z = sc.getConf().getDouble("spawn-location.z");
+            float yaw = (float) sc.getConf().getDouble("spawn-location.yaw");
+            float pitch = (float) sc.getConf().getDouble("spawn-location.pitch");
+            if (w == null) {
+                ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.world-not-found"));
+                return;
+            }
+            p.teleport(new Location(w, x, y, z, yaw, pitch), TeleportCause.COMMAND);
+            ChatUtils.sendFormattedMessage(p, sc.getLanguageNode("spawn.teleported-msg").replace("<world>", p.getWorld().getName()));
+            ChatUtils.sendFormattedMessage(sender, sc.getLanguageNode("spawn.sender-teleported-msg").replace("<player>", p.getName()).replace("<world>", p.getWorld().getName()));
+            
         }
     }
     
